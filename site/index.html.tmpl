@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="The Urbit Development Institute supports research and development that advances Urbit.">
+  <meta name="theme-color" content="#ededed">
+  <link rel="canonical" href="https://udi.urbit.org/">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/styles.css">
+  <title>Urbit Development Institute</title>
+</head>
+<body>
+  <a class="skip-link" href="#mission">Skip to content</a>
+
+  <header class="hero" aria-labelledby="site-title">
+    <div class="hero__index" aria-hidden="true">01 — 03</div>
+    <h1 class="wordmark" id="site-title" aria-label="Urbit Development Institute">
+      <span>Urbit</span>
+      <span>Development</span>
+      <span>Institute</span>
+    </h1>
+    <div class="hero__foot">
+      <p>Urbit Development<br>Institute</p>
+      <nav aria-label="Page sections">
+        <a href="#mission">mission</a>
+        <span aria-hidden="true">/</span>
+        <a href="#network">network</a>
+        <span aria-hidden="true">/</span>
+        <a href="#contribute">contribute</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="section mission" id="mission" aria-labelledby="mission-title">
+      <div class="section__label"><span>01</span><h2 id="mission-title">Mission</h2></div>
+      <p class="mission__statement">The Urbit Development Institute supports research and development that advances Urbit. A simple, durable, and open source computing system people can own and operate for themselves. We focus on the security, reliability, and long term development of the Urbit stack, and publish the results for the benefit of the broader open source community.</p>
+    </section>
+
+    <section class="section network" id="network" aria-labelledby="network-title">
+      <div class="section__label"><span>02</span><h2 id="network-title">Network</h2></div>
+      <div class="network__intro">
+        <p>Public development across the Urbit open source ecosystem.</p>
+        <p class="data-state data-state--{{.Snapshot.Status}}">{{.Freshness}}</p>
+      </div>
+
+      {{if .IsDraft}}
+      <aside class="draft-notice" role="status">
+        <span>Draft data</span>
+        <p>The metric pipeline is ready. Run the refresh command to replace these pending values with validated GitHub aggregates.</p>
+      </aside>
+      {{end}}
+
+      <div class="metric-grid">
+        <article class="metric metric--wide">
+          <p class="metric__number">{{formatCount .Snapshot.Metrics.ActiveRepositories}}</p>
+          <h3>Active repositories</h3>
+        </article>
+        <article class="metric">
+          <p class="metric__number">{{formatCount .Snapshot.Metrics.ActiveContributors}}</p>
+          <h3>Active contributors</h3>
+        </article>
+        <article class="metric">
+          <p class="metric__number">{{formatCount .Snapshot.Metrics.AllTimeContributors}}</p>
+          <h3>All-time contributors</h3>
+        </article>
+      </div>
+
+      <div class="core">
+        <table>
+          <caption>Core repositories</caption>
+          <thead><tr><th scope="col">Repository</th><th scope="col">Active</th><th scope="col">All-time</th></tr></thead>
+          <tbody>
+        {{range .CoreRepositories}}
+          <tr>
+            <th scope="row"><a href="https://github.com/{{.Name}}" target="_blank" rel="noopener noreferrer">{{.Name}}<span aria-hidden="true">↗</span></a></th>
+            <td>{{formatCount .Metrics.ActiveContributors}}</td>
+            <td>{{formatCount .Metrics.AllTimeContributors}}</td>
+          </tr>
+        {{end}}
+          </tbody>
+        </table>
+      </div>
+
+      <p class="methodology"><a href="/methodology.txt">Definitions and methodology<span aria-hidden="true">↗</span></a></p>
+    </section>
+
+    <section class="section contribute" id="contribute" aria-labelledby="contribute-title">
+      <div class="section__label"><span>03</span><h2 id="contribute-title">Contribute</h2></div>
+      <div class="contribute__body">
+        <p>Support durable, open research and development for the Urbit stack.</p>
+        <a class="donate" href="mailto:donations@urbit.org?subject=Donation%20to%20the%20Urbit%20Development%20Institute">Donate <span aria-hidden="true">↗</span></a>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>Urbit Development Institute</p>
+    <p><a href="https://urbit.org" target="_blank" rel="noopener noreferrer">urbit.org<span aria-hidden="true">↗</span></a></p>
+    <p>{{.FooterStatus}}</p>
+  </footer>
+</body>
+</html>

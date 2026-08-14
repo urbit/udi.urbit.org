@@ -1,0 +1,22 @@
+{
+  "organizations": [
+    "urbit",
+    "tocwex",
+    "tloncorp",
+    "gwbtc"
+  ],
+  "repositorySearchQueries": [
+    "language:Hoon fork:false archived:false is:public"
+  ],
+  "explicitInclude": [
+    "urbit/urbit",
+    "urbit/vere"
+  ],
+  "explicitExclude": [],
+  "coreRepositories": [
+    "urbit/urbit",
+    "urbit/vere"
+  ],
+  "activityWindowMonths": 6,
+  "maxPagesPerEndpoint": 100
+}

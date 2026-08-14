@@ -1,0 +1,66 @@
+{
+  "schemaVersion": 1,
+  "methodologyVersion": "2026-08-12.1",
+  "configDigest": "sha256:5b1036dbabb0a67e2e13b972b9c1cce4ffdc379f597b1d98a9f45645f43fed28",
+  "status": "complete",
+  "generatedAt": "2026-08-13T17:43:22Z",
+  "activeWindow": {
+    "start": "2026-02-13T17:43:22Z",
+    "end": "2026-08-13T17:43:22Z",
+    "label": "trailing six months"
+  },
+  "coverage": {
+    "complete": true,
+    "candidateRepositories": 752,
+    "includedRepositories": 565,
+    "organizations": [
+      "urbit",
+      "tocwex",
+      "tloncorp",
+      "gwbtc"
+    ],
+    "warnings": null
+  },
+  "metrics": {
+    "activeRepositories": {
+      "count": 94,
+      "unit": "count"
+    },
+    "activeContributors": {
+      "count": 56,
+      "unit": "count"
+    },
+    "allTimeContributors": {
+      "count": 386,
+      "unit": "count"
+    }
+  },
+  "coreRepositories": {
+    "urbit/urbit": {
+      "activeContributors": {
+        "count": 13,
+        "unit": "count"
+      },
+      "allTimeContributors": {
+        "count": 194,
+        "unit": "count"
+      }
+    },
+    "urbit/vere": {
+      "activeContributors": {
+        "count": 11,
+        "unit": "count"
+      },
+      "allTimeContributors": {
+        "count": 143,
+        "unit": "count"
+      }
+    }
+  },
+  "definitions": {
+    "activeContributor": "A unique, identifiable, non-bot GitHub commit author or merged-pull-request author active during the trailing six months across any included ecosystem repository.",
+    "activeRepository": "An included repository with a default-branch commit or merged pull request during the trailing six months.",
+    "allTimeContributor": "A unique, identifiable, non-bot GitHub commit author or merged-pull-request author across the current included repository set.",
+    "includedRepository": "A public, non-fork, non-archived repository with verified Hoon language evidence, plus approved core exceptions."
+  }
+}
