@@ -52,6 +52,22 @@ func TestBuildRejectsInvalidSnapshotWithoutReplacingOutput(t *testing.T) {
 	}
 }
 
+func TestProductionTemplateLinksToNetworkUserMetrics(t *testing.T) {
+	root := filepath.Join("..", "..")
+	output := filepath.Join(t.TempDir(), "dist")
+	if err := Build(root, output, metrics.DraftSnapshot()); err != nil {
+		t.Fatalf("Build() production template: %v", err)
+	}
+	page, err := os.ReadFile(filepath.Join(output, "index.html"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	want := `<p class="methodology"><a href="https://network.urbit.org" target="_blank" rel="noopener noreferrer">For user metrics, visit network.urbit.org<span aria-hidden="true">↗</span></a></p>`
+	if !strings.Contains(string(page), want) {
+		t.Errorf("index.html missing network user metrics link %q", want)
+	}
+}
+
 func write(t *testing.T, path, data string) {
 	t.Helper()
 	if err := os.MkdirAll(filepath.Dir(path), 0o755); err != nil {
