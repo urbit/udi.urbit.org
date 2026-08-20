@@ -220,10 +220,12 @@ data/history/            dated successful snapshots
 internal/github/         GitHub REST collector
 internal/metrics/        public data contract and validation
 internal/site/           static renderer
-site/                    HTML template, CSS, and static assets
-docs/methodology.md      metric definitions and limitations
+site/                    HTML page templates, CSS, and static assets
+docs/methodology.md      detailed metric specification and limitations
 dist/                    generated, gitignored site output
 ```
+
+The build renders both the overview and the concise public methodology page. The detailed Markdown methodology remains the operator-facing specification for auditing collector behavior.
 
 ## Deployment Direction
 

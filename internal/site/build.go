@@ -9,6 +9,7 @@ import (
 	"os"
 	"path/filepath"
 	"sort"
+	"strings"
 	"time"
 
 	"github.com/urbit/udi.urbit.org/internal/metrics"
@@ -44,14 +45,15 @@ func Build(root, output string, snapshot metrics.Snapshot) error {
 	if err := copyStatic(source, temporary); err != nil {
 		return err
 	}
-	if err := renderIndex(filepath.Join(source, "index.html.tmpl"), filepath.Join(temporary, "index.html"), pageData(snapshot)); err != nil {
+	data := pageData(snapshot)
+	if err := renderPage(filepath.Join(source, "index.html.tmpl"), filepath.Join(temporary, "index.html"), data); err != nil {
+		return err
+	}
+	if err := renderPage(filepath.Join(source, "methodology.html.tmpl"), filepath.Join(temporary, "methodology", "index.html"), data); err != nil {
 		return err
 	}
 	if err := metrics.WriteAtomic(filepath.Join(temporary, "data", "latest.json"), snapshot); err != nil {
 		return fmt.Errorf("write public metric snapshot: %w", err)
-	}
-	if err := copyFile(filepath.Join(root, "docs", "methodology.md"), filepath.Join(temporary, "methodology.txt")); err != nil {
-		return fmt.Errorf("copy public methodology: %w", err)
 	}
 	backup := output + ".previous"
 	if err := os.RemoveAll(backup); err != nil {
@@ -104,8 +106,8 @@ func pageData(snapshot metrics.Snapshot) PageData {
 	return data
 }
 
-func renderIndex(templatePath, outputPath string, data PageData) error {
-	page, err := template.New("index.html.tmpl").Funcs(template.FuncMap{
+func renderPage(templatePath, outputPath string, data PageData) error {
+	page, err := template.New(filepath.Base(templatePath)).Funcs(template.FuncMap{
 		"formatCount": func(value metrics.Value) string {
 			if value.Count == nil {
 				return "—"
@@ -136,7 +138,7 @@ func copyStatic(source, destination string) error {
 		if err != nil {
 			return fmt.Errorf("resolve site source path %s: %w", path, err)
 		}
-		if relative == "." || entry.Name() == "index.html.tmpl" {
+		if relative == "." || strings.HasSuffix(entry.Name(), ".tmpl") {
 			return nil
 		}
 		target := filepath.Join(destination, relative)

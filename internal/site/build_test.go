@@ -12,8 +12,8 @@ import (
 func TestBuildRendersDraftAndCopiesAssets(t *testing.T) {
 	root := t.TempDir()
 	write(t, filepath.Join(root, "site", "index.html.tmpl"), `<p>{{formatCount .Snapshot.Metrics.ActiveContributors}}</p><p>{{.Freshness}}</p>{{if .IsDraft}}<p>draft</p>{{end}}`)
+	write(t, filepath.Join(root, "site", "methodology.html.tmpl"), `<p>Methodology {{.Snapshot.MethodologyVersion}}</p>`)
 	write(t, filepath.Join(root, "site", "styles.css"), `body{color:#3f3f3f}`)
-	write(t, filepath.Join(root, "docs", "methodology.md"), `# Methodology`)
 	output := filepath.Join(root, "dist")
 	if err := Build(root, output, metrics.DraftSnapshot()); err != nil {
 		t.Fatalf("Build() error = %v", err)
@@ -33,8 +33,12 @@ func TestBuildRendersDraftAndCopiesAssets(t *testing.T) {
 	if _, err := os.Stat(filepath.Join(output, "data", "latest.json")); err != nil {
 		t.Fatalf("copied data: %v", err)
 	}
-	if _, err := os.Stat(filepath.Join(output, "methodology.txt")); err != nil {
-		t.Fatalf("copied methodology: %v", err)
+	methodology, err := os.ReadFile(filepath.Join(output, "methodology", "index.html"))
+	if err != nil {
+		t.Fatalf("rendered methodology: %v", err)
+	}
+	if !strings.Contains(string(methodology), "Methodology 2026-08-12.1") {
+		t.Errorf("methodology page missing snapshot version: %s", methodology)
 	}
 }
 
@@ -52,7 +56,7 @@ func TestBuildRejectsInvalidSnapshotWithoutReplacingOutput(t *testing.T) {
 	}
 }
 
-func TestProductionTemplateLinksToNetworkUserMetrics(t *testing.T) {
+func TestProductionTemplatesRenderMetricReferences(t *testing.T) {
 	root := filepath.Join("..", "..")
 	output := filepath.Join(t.TempDir(), "dist")
 	if err := Build(root, output, metrics.DraftSnapshot()); err != nil {
@@ -62,9 +66,22 @@ func TestProductionTemplateLinksToNetworkUserMetrics(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	want := `<p class="methodology"><a href="https://network.urbit.org" target="_blank" rel="noopener noreferrer">For user metrics, visit network.urbit.org<span aria-hidden="true">↗</span></a></p>`
-	if !strings.Contains(string(page), want) {
-		t.Errorf("index.html missing network user metrics link %q", want)
+	for _, want := range []string{
+		`<p class="methodology"><a href="https://network.urbit.org" target="_blank" rel="noopener noreferrer">For user metrics, visit network.urbit.org<span aria-hidden="true">↗</span></a></p>`,
+		`<a href="/methodology/">Definitions and methodology`,
+	} {
+		if !strings.Contains(string(page), want) {
+			t.Errorf("index.html missing metric reference %q", want)
+		}
+	}
+	methodology, err := os.ReadFile(filepath.Join(output, "methodology", "index.html"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	for _, want := range []string{"How the numbers are counted.", "Active contributor", "Methodology v2026-08-12.1"} {
+		if !strings.Contains(string(methodology), want) {
+			t.Errorf("methodology/index.html missing %q", want)
+		}
 	}
 }
 
