@@ -1,12 +1,12 @@
 # Urbit Development Institute
 
-Local source for the proposed `udi.urbit.org` website and its public GitHub ecosystem metrics.
+Local source for the proposed `udi.urbit.org` website, its public GitHub ecosystem metrics, and published technical reports.
 
 The project is intentionally static. A Go command collects and validates aggregate GitHub data, then renders a dependency-free HTML/CSS site into `dist/`. It does not require a VPS, database, JavaScript runtime, or live deployment to develop locally.
 
 ## Status
 
-Draft site and collection pipeline. No GitHub remote, Vercel project, or DNS record is configured yet.
+Draft site and collection pipeline. The private GitHub remote is configured; a Vercel project and DNS record are not yet configured.
 
 The checked-in `data/latest.json` starts in `draft` state with null metric values. The site renders those values as em dashes rather than inventing numbers.
 
