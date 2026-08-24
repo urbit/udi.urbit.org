@@ -69,9 +69,14 @@ func TestProductionTemplatesRenderMetricReferences(t *testing.T) {
 	for _, want := range []string{
 		`<p class="methodology"><a href="https://network.urbit.org" target="_blank" rel="noopener noreferrer">For user metrics, visit network.urbit.org<span aria-hidden="true">↗</span></a></p>`,
 		`<a href="/methodology/">Definitions and methodology`,
+		`<a href="#reports">reports</a>`,
+		`<div class="section__label"><span>03</span><h2 id="reports-title">Reports</h2></div>`,
+		`<a href="https://urbit-development-institute.s3.us-east-2.amazonaws.com/Urbit+Security+Audit+-+June+17th.pdf" target="_blank" rel="noopener noreferrer">Urbit Constitution Security Audit`,
+		`The audit found no high-severity issues`,
+		`<div class="section__label"><span>04</span><h2 id="contribute-title">Contribute</h2></div>`,
 	} {
 		if !strings.Contains(string(page), want) {
-			t.Errorf("index.html missing metric reference %q", want)
+			t.Errorf("index.html missing site content %q", want)
 		}
 	}
 	methodology, err := os.ReadFile(filepath.Join(output, "methodology", "index.html"))
