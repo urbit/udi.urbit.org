@@ -1,19 +1,20 @@
 # Urbit Development Institute
 
-Local source for the proposed `udi.urbit.org` website, its public GitHub ecosystem metrics, and published technical reports.
+Source for `udi.urbit.org`, its public GitHub ecosystem metrics, and published technical reports.
 
-The project is intentionally static. A Go command collects and validates aggregate GitHub data, then renders a dependency-free HTML/CSS site into `dist/`. It does not require a VPS, database, JavaScript runtime, or live deployment to develop locally.
+The project is intentionally static. A Go command collects and validates aggregate GitHub data, then renders a dependency-free HTML/CSS site into `dist/`. The deployed site requires no server, database, or client-side JavaScript runtime.
 
 ## Status
 
-Draft site and collection pipeline. The private GitHub remote is configured; a Vercel project and DNS record are not yet configured.
+The private GitHub repository and Urbit-team Vercel project are configured. The `udi.urbit.org` DNS record is not yet configured.
 
-The checked-in `data/latest.json` starts in `draft` state with null metric values. The site renders those values as em dashes rather than inventing numbers.
+The checked-in `data/latest.json` is the latest validated complete snapshot. A draft snapshot uses JSON `null` values, which the site renders as em dashes rather than inventing numbers.
 
 ## Requirements
 
 - Arch Linux / Omarchy
 - Go 1.23+
+- Node.js 22+ for artifact verification
 - Python 3 for the documented local static server
 - A GitHub token only when refreshing metrics
 
@@ -21,6 +22,7 @@ The checked-in `data/latest.json` starts in `draft` state with null metric value
 
 ```bash
 go run ./cmd/udi build
+node scripts/verify-dist.mjs
 ```
 
 Generated output:
@@ -28,6 +30,8 @@ Generated output:
 ```text
 dist/
 ```
+
+`dist/` is committed because it is the exact static artifact published by Vercel. After changing templates, styles, assets, or data, rebuild and commit the corresponding `dist/` changes. CI rebuilds the artifact and rejects stale output.
 
 Preview it locally:
 
@@ -200,6 +204,8 @@ go run ./cmd/udi discover
 go run ./cmd/udi refresh
 go test ./...
 go vet ./...
+node --test scripts/verify-dist.test.mjs
+node scripts/verify-dist.mjs
 ```
 
 Optional flags:
@@ -221,15 +227,28 @@ internal/github/         GitHub REST collector
 internal/metrics/        public data contract and validation
 internal/site/           static renderer
 site/                    HTML page templates, CSS, and static assets
+scripts/                 dependency-free Vercel artifact verification
 docs/methodology.md      detailed metric specification and limitations
-dist/                    generated, gitignored site output
+dist/                    generated, committed Vercel artifact
+vercel.json              static deployment configuration
 ```
 
 The build renders both the overview and the concise public methodology page. The detailed Markdown methodology remains the operator-facing specification for auditing collector behavior.
 
-## Deployment Direction
+## Vercel Deployment
 
-Keep the site static. When publication is approved, the same `refresh` and `build` commands can run manually, in GitHub Actions, or from cron without changing the frontend architecture. A continuously running full-stack VPS is unnecessary for this workload.
+Vercel uses the **Other** framework preset, runs the dependency-free Node verifier, and publishes only `dist/`. It does not run the Go collector or renderer and does not need `GITHUB_TOKEN` or any other environment variable.
+
+The Vercel project must use:
+
+- Git repository: `urbit/udi.urbit.org`
+- Production branch: `master`
+- Root directory: repository root
+- Build and output settings: inherited from `vercel.json`
+
+Pull requests receive preview deployments through Vercel's Git integration. A merge to `master` publishes the already-validated artifact to production. Metric updates remain an operator workflow: run `go run ./cmd/udi refresh`, review both `data/` and `dist/`, and commit them together.
+
+Local CLI uploads are protected by `.vercelignore`, which excludes `.env`, lock files, local Vercel state, and interrupted-build directories. Never add `GITHUB_TOKEN` to Vercel; deployment does not use it.
 
 ## Font
 

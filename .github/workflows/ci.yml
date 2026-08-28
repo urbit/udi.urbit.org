@@ -1,0 +1,49 @@
+name: Validate
+
+on:
+  pull_request:
+  push:
+    branches: [master]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: validate-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test-and-build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+          cache: false
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Test Go packages
+        run: go test -race ./...
+
+      - name: Run Go static analysis
+        run: go vet ./...
+
+      - name: Test artifact verifier
+        run: node --test scripts/verify-dist.test.mjs
+
+      - name: Rebuild static artifact
+        run: go run ./cmd/udi build -root . -output dist
+
+      - name: Verify Vercel artifact
+        run: node scripts/verify-dist.mjs
+
+      - name: Require committed artifact to be current
+        run: git diff --exit-code -- dist

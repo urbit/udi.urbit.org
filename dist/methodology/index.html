@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="How the Urbit Development Institute counts public GitHub development activity across the Urbit ecosystem.">
+  <title>Metrics Methodology — Urbit Development Institute</title>
+  <link rel="canonical" href="https://udi.urbit.org/methodology/">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body class="method-page">
+  <a class="skip-link" href="#methodology-content">Skip to methodology</a>
+
+  <header class="method-header">
+    <a class="method-header__brand" href="/">Urbit Development Institute</a>
+    <a class="method-header__back" href="/"><span aria-hidden="true">←</span> Back to overview</a>
+  </header>
+
+  <main class="method-main" id="methodology-content">
+    <div class="method-hero">
+      <p class="method-kicker">GitHub metrics / methodology</p>
+      <h1>How the numbers are counted.</h1>
+      <p class="method-lede">The site reports observable public development activity across the Urbit ecosystem. The figures are useful indicators, not an exhaustive census of everyone who contributes to Urbit.</p>
+      <dl class="method-meta">
+        <div><dt>Version</dt><dd>2026-08-12.1</dd></div>
+        <div><dt>Source</dt><dd>Public GitHub activity</dd></div>
+        <div><dt>Active window</dt><dd>Trailing six months</dd></div>
+      </dl>
+    </div>
+
+    <section class="method-section" aria-labelledby="definitions-title">
+      <div class="method-section__label"><span>01</span><h2 id="definitions-title">Definitions</h2></div>
+      <div class="method-definitions">
+        <article>
+          <h3>Included repository</h3>
+          <p>A public repository that is not a fork, archived, or disabled and that GitHub identifies as containing Hoon. Approved core exceptions, currently <code>urbit/urbit</code> and <code>urbit/vere</code>, are also included.</p>
+        </article>
+        <article>
+          <h3>Active repository</h3>
+          <p>An included repository with at least one default-branch commit or merged pull request during the trailing six calendar months.</p>
+        </article>
+        <article>
+          <h3>Active contributor</h3>
+          <p>A unique, identifiable non-bot GitHub account that authored a default-branch commit or merged pull request during the active window across any included repository.</p>
+        </article>
+        <article>
+          <h3>All-time contributor</h3>
+          <p>A unique, identifiable non-bot account represented in GitHub’s contributor aggregation or as the author of a merged pull request across the current included repository set.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="method-section" aria-labelledby="collection-title">
+      <div class="method-section__label"><span>02</span><h2 id="collection-title">Collection</h2></div>
+      <div class="method-copy">
+        <p>Repository discovery combines configured Urbit-related organizations, a global search for public Hoon repositories, and audited manual inclusion and exclusion rules.</p>
+        <p>Contributors are deduplicated using GitHub’s numeric user IDs. The public dataset contains aggregate counts only—no contributor IDs, logins, names, email addresses, or email hashes are published.</p>
+      </div>
+    </section>
+
+    <section class="method-section" aria-labelledby="reliability-title">
+      <div class="method-section__label"><span>03</span><h2 id="reliability-title">Reliability</h2></div>
+      <div class="method-copy">
+        <p>A new snapshot is published only when every required request and pagination chain completes, both core repositories are present, and aggregate validation passes.</p>
+        <p>If collection is incomplete or GitHub returns an error, the last known-good snapshot remains published. Missing data is never presented as a measured zero.</p>
+      </div>
+    </section>
+
+    <section class="method-section" aria-labelledby="limits-title">
+      <div class="method-section__label"><span>04</span><h2 id="limits-title">Limits</h2></div>
+      <div class="method-copy">
+        <p>Mixed-language repositories that GitHub does not classify as Hoon may be missed outside configured organizations. Anonymous and unlinked commits are excluded rather than guessed.</p>
+        <p>Issues, reviews, comments, off-repository documentation, operations, design, community work, and other non-code contributions are not counted. GitHub’s contributor aggregation may also lag or omit identities it cannot link.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="method-footer">
+    <p>Updated 13 Aug 2026</p>
+    <p>Methodology v2026-08-12.1</p>
+    <p><a href="/data/latest.json">Latest aggregate data<span aria-hidden="true">↗</span></a></p>
+  </footer>
+</body>
+</html>
