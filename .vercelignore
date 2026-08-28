@@ -1,5 +1,4 @@
 /.env
-*.tmp
 /.udi-operation.lock
 /.vercel/
 /node_modules/
